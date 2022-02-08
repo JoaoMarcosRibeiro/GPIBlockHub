@@ -15,17 +15,31 @@ export class ColaboradorProjetoService {
     return result.id;
   }
 
+  async findAll() {
+    return await this.ColaboradorProjetoModel.find().exec();
+  }
+
   async findById(id: string) {
     return this.ColaboradorProjetoModel.findById(id).exec();
   }
 
   async update(id: string, colaboradorProjeto: ColaboradorProjeto) {
-    return this.ColaboradorProjetoModel.findByIdAndUpdate(id, colaboradorProjeto).exec();
+    const colaboradorProjetoUpdate = this.ColaboradorProjetoModel.findByIdAndUpdate(id, colaboradorProjeto).exec();
+
+    if (!colaboradorProjetoUpdate) {
+      throw new Error("Erro ao atualizar relação entre cordenador e projeto")
+    }
+
+    return colaboradorProjetoUpdate
   }
 
   async remove(colaboradorProjeto: ColaboradorProjeto) {
     const colaboradorProjetoRemovido = this.ColaboradorProjetoModel.findOneAndDelete(colaboradorProjeto).exec();
 
-        return (await colaboradorProjetoRemovido).remove();
+    if(!colaboradorProjetoRemovido){
+			throw new Error("Erro ao remover relação entre colaborador e projeto")
+		}
+
+    return (await colaboradorProjetoRemovido).remove();
   }
 }

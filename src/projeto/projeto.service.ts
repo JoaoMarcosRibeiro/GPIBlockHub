@@ -15,17 +15,31 @@ export class ProjetoService {
         return result.id;
     }
 
+    async findAll() {
+        return await this.projetoModel.find().exec();
+    }
+
     async findById(id: string) {
         return this.projetoModel.findById(id).exec();
     }
 
     async update(id: string, projeto: Projeto) {
-        return this.projetoModel.findByIdAndUpdate(id, projeto).exec();
+        const projetoUpdate = this.projetoModel.findByIdAndUpdate(id, projeto).exec();
+
+        if(!projetoUpdate){
+			throw new Error("Erro ao atualizar projeto")
+		}
+
+        return projetoUpdate
     }
 
     async remove(id: string) {
-        const projetoRemovido = this.projetoModel.findOneAndDelete({ _id: id }).exec();
+        const projetoRemove = this.projetoModel.findOneAndDelete({ _id: id }).exec();
 
-        return (await projetoRemovido).remove();
+        if(!projetoRemove){
+			throw new Error("Erro ao remover projeto")
+		}
+
+        return (await projetoRemove).remove();
     }
 }

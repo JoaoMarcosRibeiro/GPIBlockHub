@@ -15,21 +15,35 @@ export class UserService {
         return result.id;
     }
 
+    async findAll() {
+        return await this.userModel.find().exec();
+    }
+
     async findById(id: string) {
         return this.userModel.findById(id).exec();
     }
 
     async findByLogin(login: string) {
-        return this.userModel.findOne({login}).exec();
+        return this.userModel.findOne({ login }).exec();
     }
 
     async update(id: string, user: User) {
-        return this.userModel.findByIdAndUpdate(id, user).exec();
+        const userUpdate = this.userModel.findByIdAndUpdate(id, user).exec();
+
+        if(!userUpdate){
+			throw new Error("Erro ao atualizar usuário")
+		}
+
+        return userUpdate
     }
 
     async remove(id: string) {
-        const userRemovido = this.userModel.findOneAndDelete({ _id: id }).exec();
+        const userRemove = this.userModel.findOneAndDelete({ _id: id }).exec();
 
-        return (await userRemovido).remove();
+        if(!userRemove){
+			throw new Error("Erro ao remover usuário")
+		}
+
+        return (await userRemove).remove();
     }
 }

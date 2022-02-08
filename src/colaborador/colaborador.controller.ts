@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Delete, Get, NotFoundException, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { ColaboradorService } from './colaborador.service';
 import { Colaborador } from './colaborador.model';
 import { JwtAuthGuard } from './../auth/jwt-auth.guard';
@@ -10,25 +10,41 @@ export class ColaboradorController {
 
     @UseGuards(JwtAuthGuard)
     @Get('findById/:id')
-    get(@Param() params) {
-        return this.service.findById(params.id);
+    async get(@Param() params) {
+        const colaborador = await this.service.findById(params.id);
+
+		if(!colaborador){
+			throw new NotFoundException('Colaborador não encontrado!')
+		}
+
+		return colaborador
     }
 
     @UseGuards(JwtAuthGuard)
     @Post('create')
-    create(@Body() colaborador: Colaborador) {
+    async create(@Body() colaborador: Colaborador) {
         return this.service.create(colaborador);
     }
 
     @UseGuards(JwtAuthGuard)
     @Put('update/:id')
-    update(@Param() params, @Body() colaborador: Colaborador): Promise<Colaborador> {
-        return this.service.update(params.id, colaborador);
+    async update(@Param() params, @Body() colaborador: Colaborador): Promise<Colaborador> {
+        try{
+			return this.service.update(params.id, colaborador);
+		}
+		catch(error){
+			throw new BadRequestException(error.message)
+		}        
     }
 
     @UseGuards(JwtAuthGuard)
     @Delete('delete/:id')
-    remove(@Param() params) {
-        return this.service.remove(params.id);
+    async remove(@Param() params) {
+        try{
+			return this.service.remove(params.id);
+		}
+		catch(error){
+			throw new BadRequestException(error.message)
+		}        
     }
 }

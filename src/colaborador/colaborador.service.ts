@@ -15,17 +15,31 @@ export class ColaboradorService {
         return result.id;
     }
 
+    async findAll() {
+        return await this.colaboradorModel.find().exec();
+    }
+
     async findById(id: string) {
         return this.colaboradorModel.findById(id).exec();
     }
 
     async update(id: string, colaborador: Colaborador) {
-        return this.colaboradorModel.findByIdAndUpdate(id, colaborador).exec();
+        const colaboradorUpdate = this.colaboradorModel.findByIdAndUpdate(id, colaborador).exec();
+
+        if (!colaboradorUpdate) {
+            throw new Error("Erro ao atualizar colaborador")
+          }
+      
+          return colaboradorUpdate
     }
 
     async remove(id: string) {
-        const colaboradorRemovido = this.colaboradorModel.findOneAndDelete({ _id: id }).exec();
+        const colaboradorRemove = this.colaboradorModel.findOneAndDelete({ _id: id }).exec();
 
-        return (await colaboradorRemovido).remove();
+        if(!colaboradorRemove){
+			throw new Error("Erro ao remover colaborador")
+		}
+
+        return (await colaboradorRemove).remove();
     }
 }
