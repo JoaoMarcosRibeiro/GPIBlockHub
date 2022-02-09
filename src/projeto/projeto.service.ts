@@ -10,8 +10,8 @@ export class ProjetoService {
     ) {
     }
 
-    async create(doc: Projeto) {
-        const result = await new this.projetoModel(doc).save();
+    async create(projeto: Projeto) {
+        const result = await new this.projetoModel(projeto).save();
         return result.id;
     }
 

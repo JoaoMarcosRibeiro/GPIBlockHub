@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User } from './user.model';
 import { Model } from 'mongoose';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -10,8 +11,8 @@ export class UserService {
     ) {
     }
 
-    async create(doc: User) {
-        const result = await new this.userModel(doc).save();
+    async create(user: User) {
+        const result = await new this.userModel(user).save();
         return result.id;
     }
 
@@ -28,21 +29,25 @@ export class UserService {
     }
 
     async update(id: string, user: User) {
-        const userUpdate = this.userModel.findByIdAndUpdate(id, user).exec();
+        const userUpdate = await this.userModel.findById(id);
 
-        if(!userUpdate){
-			throw new Error("Erro ao atualizar usuário")
-		}
+        user.senha = await bcrypt.hash(userUpdate.senha, 10); //cria novo hash
 
-        return userUpdate
+        const result = await this.userModel.updateOne({ _id: id }, user).exec();
+
+        if (!result) {
+            throw new Error("Erro na atualização de usuário")
+        }
+
+        return this.userModel.findById(id);
     }
 
     async remove(id: string) {
         const userRemove = this.userModel.findOneAndDelete({ _id: id }).exec();
 
-        if(!userRemove){
-			throw new Error("Erro ao remover usuário")
-		}
+        if (!userRemove) {
+            throw new Error("Erro ao remover usuário")
+        }
 
         return (await userRemove).remove();
     }

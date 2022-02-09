@@ -10,8 +10,9 @@ export class ColaboradorService {
     ) {
     }
 
-    async create(doc: Colaborador) {
-        const result = await new this.colaboradorModel(doc).save();
+    async create(colaborador: Colaborador) {
+        const result = await new this.colaboradorModel(colaborador).save();
+
         return result.id;
     }
 
@@ -27,18 +28,20 @@ export class ColaboradorService {
         const colaboradorUpdate = this.colaboradorModel.findByIdAndUpdate(id, colaborador).exec();
 
         if (!colaboradorUpdate) {
+
             throw new Error("Erro ao atualizar colaborador")
-          }
-      
-          return colaboradorUpdate
+        }
+
+        return colaboradorUpdate
     }
 
     async remove(id: string) {
         const colaboradorRemove = this.colaboradorModel.findOneAndDelete({ _id: id }).exec();
 
-        if(!colaboradorRemove){
-			throw new Error("Erro ao remover colaborador")
-		}
+        if (!colaboradorRemove) {
+
+            throw new Error("Erro ao remover colaborador")
+        }
 
         return (await colaboradorRemove).remove();
     }

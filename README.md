@@ -1,8 +1,8 @@
-# **DESAFIO BACKEND JR. BLOCKHUB - Gerenciamento de projetos internos**
+# **Gerenciamento de Projetos Internos da BlockHub**
 
 ## Description
 
-Projeto criado para atender o desafio da vaga de Backend Jr. na BlockHub que consiste em uma API REST desenvolvido com o framework Nestjs
+Projeto criado para atender o desafio da vaga de Back-End Developer Jr. da BlockHub, que consiste em uma API REST desenvolvido com o framework Nestjs
 e utilizado o banco de dados MongoDB para gerenciamento de dados.
 
 ## Requisitos
