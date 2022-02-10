@@ -33,8 +33,8 @@ export class ProjetoController {
 			throw new BadRequestException("Você deve especificar uma data de início para o projeto")
 		}
 
-		if(projeto.fim && projeto.inicio>=projeto.fim){
-			throw new BadRequestException("Data de início do projeto não pode ser maior que data de fim")
+		if(projeto.fim && projeto.inicio >= projeto.fim){
+			throw new BadRequestException("Data de início do projeto não pode ser maior ou igual que data de fim")
 		}
 
         return this.service.create(projeto);

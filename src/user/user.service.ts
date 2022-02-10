@@ -13,6 +13,11 @@ export class UserService {
 
     async create(user: User) {
         const result = await new this.userModel(user).save();
+
+        if (!result) {
+            throw new Error("Erro ao cadastrar usuário")
+        }
+
         return result.id;
     }
 

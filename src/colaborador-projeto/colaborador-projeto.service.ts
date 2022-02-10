@@ -19,7 +19,11 @@ export class ColaboradorProjetoService {
       throw new PreconditionFailedException();
     }
 
-    createColaboradorProjeto.save();
+    const result = createColaboradorProjeto.save();
+
+    if (!result) {
+      throw new Error("Erro ao cadastrar relação entre colaborador e projeto")
+    }
 
     return createColaboradorProjeto.id;
   }
@@ -68,10 +72,7 @@ export class ColaboradorProjetoService {
   }
 
   async verificarConflito(colaboradorProjeto: ColaboradorProjeto, updatedId: string) {
-    const conflito = await this.ColaboradorProjetoModel.find({
-      ProjetoId: colaboradorProjeto.ProjetoId,
-      ColaboradorId: colaboradorProjeto.ColaboradorId
-    }).exec();
+    const conflito = await this.ColaboradorProjetoModel.find({ ProjetoId: colaboradorProjeto.ProjetoId, ColaboradorId: colaboradorProjeto.ColaboradorId }).exec();
 
     if (conflito) {
 

@@ -13,8 +13,8 @@ export class AuthService {
 
     async validateUser(userLogin: string, userSenha: string) {
         const user = await this.userService.findByLogin(userLogin);
-        const verificaSenha = bcrypt.compare(userSenha, user.senha)
-        if (user && verificaSenha) {
+        const verificaSenha = bcrypt.compare(userSenha, user.senha) //Compara senha
+        if (user && verificaSenha && user.active) {
             const { _id, login } = user;
             return { id: _id, login };
         }

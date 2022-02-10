@@ -12,6 +12,11 @@ export class ProjetoService {
 
     async create(projeto: Projeto) {
         const result = await new this.projetoModel(projeto).save();
+
+        if(!result){
+			throw new Error("Erro ao cadastrar projeto")
+		}
+
         return result.id;
     }
 

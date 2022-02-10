@@ -13,6 +13,10 @@ export class ColaboradorService {
     async create(colaborador: Colaborador) {
         const result = await new this.colaboradorModel(colaborador).save();
 
+        if (!result) {
+            throw new Error("Erro ao cadastrar colaborador")
+        }
+
         return result.id;
     }
 
